@@ -11,6 +11,36 @@
     <description>just test</description>
     <dependencies>
         <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.11</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
             <version>0.10.2.1</version>
@@ -20,40 +50,61 @@
             <artifactId>kafka-clients</artifactId>
             <version>0.10.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
     </dependencies>
     <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
-            <configuration>
-                <source>1.8</source>
-                <target>1.8</target>
-                <encoding>UTF-8</encoding>  <!-- “编码 GBK 的不可映射字符”问题的解决 -->
-            </configuration>
-        </plugin>
-        <!-- 把依赖的jar包拷到lib目录下 -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-                <execution>
-                    <id>copy-dependencies</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>copy-dependencies</goal>
-                    </goals>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
                     <configuration>
-                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        <overWriteReleases>false</overWriteReleases>
-                        <overWriteSnapshots>false</overWriteSnapshots>
-                        <overWriteIfNewer>true</overWriteIfNewer>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>  <!-- “编码 GBK 的不可映射字符”问题的解决 -->
                     </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <useUniqueVersions>false</useUniqueVersions>
+                                <classpathPrefix>lib/</classpathPrefix>
+                                <mainClass> cn.com.shuang.kafka.KafkaOffsetTools</mainClass>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <!-- 把依赖的jar包拷到lib目录下 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-dependencies</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                <overWriteReleases>false</overWriteReleases>
+                                <overWriteSnapshots>false</overWriteSnapshots>
+                                <overWriteIfNewer>true</overWriteIfNewer>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
